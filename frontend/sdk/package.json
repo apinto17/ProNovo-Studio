@@ -1,0 +1,11 @@
+{
+  "name": "sdk",
+  "version": "1.0.0",
+  "description": "holds hooks from the backend to the ui",
+  "main": "index.ts",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Alex Pinto",
+  "license": "ISC"
+}
