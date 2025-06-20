@@ -9,12 +9,7 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { FileUpload } from "./FileUpload";
-
-interface Message {
-  id: number;
-  sender: "user" | "bot";
-  content: string;
-}
+import { useMessage, Message } from "sdk";
 
 export const ChatPane: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -22,6 +17,8 @@ export const ChatPane: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const [fileName, setFileName] = useState<string | null>(null);
+
+  const { sendMessage } = useMessage();
 
   const handleFileSelect = (file: File) => {
     setFileName(file.name);
@@ -36,7 +33,17 @@ export const ChatPane: React.FC = () => {
       content: input,
     };
 
-    setMessages((prev) => [...prev, newMessage]);
+    let botMessage: Message | null;
+
+    sendMessage({
+      message: newMessage,
+      onSuccessCallback: (data: Message) => {
+        console.log(data);
+        botMessage = data;
+        setMessages((prev) => [...prev, newMessage, data]);
+      },
+    });
+
     setInput("");
   };
 

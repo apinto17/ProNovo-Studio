@@ -1,11 +1,19 @@
 {
   "name": "sdk",
+  "type": "module",
   "version": "1.0.0",
   "description": "holds hooks from the backend to the ui",
-  "main": "index.ts",
+  "main": "src/index.tsx",
   "scripts": {
     "test": "test"
   },
   "author": "Alex Pinto",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@tanstack/react-query": "^5.80.10",
+    "axios": "^1.10.0"
+  },
+  "devDependencies": {
+    "orval": "^7.10.0"
+  }
 }
