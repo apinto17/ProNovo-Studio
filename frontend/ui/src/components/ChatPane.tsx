@@ -11,7 +11,10 @@ import SendIcon from "@mui/icons-material/Send";
 import { FileUpload } from "./FileUpload";
 import { useMessage, Message } from "sdk";
 
-export const ChatPane: React.FC = () => {
+export const ChatPane = (params: {
+  setPdbContent: React.Dispatch<React.SetStateAction<string | null>>;
+}) => {
+  const { setPdbContent } = params;
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -31,6 +34,7 @@ export const ChatPane: React.FC = () => {
       id: messages.length + 1,
       sender: "user",
       content: input,
+      data: null,
     };
 
     let botMessage: Message | null;
@@ -40,6 +44,9 @@ export const ChatPane: React.FC = () => {
       onSuccessCallback: (data: Message) => {
         console.log(data);
         botMessage = data;
+        if (botMessage.data) {
+          setPdbContent(botMessage.data);
+        }
         setMessages((prev) => [...prev, newMessage, data]);
       },
     });

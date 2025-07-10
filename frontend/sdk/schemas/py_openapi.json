@@ -121,13 +121,25 @@
           "content": {
             "type": "string",
             "title": "Content"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data"
           }
         },
         "type": "object",
         "required": [
           "id",
           "sender",
-          "content"
+          "content",
+          "data"
         ],
         "title": "message"
       }

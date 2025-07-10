@@ -1,5 +1,11 @@
 # 📦 Release Notes
 
+## Version 1.0.1 – July 2, 2025
+
+### 🚀 New Features
+
+- **Agentic Tooling**: Connected tools to langChain agent such as RF Diffusion and PDB searcher
+
 ## Version 1.0.0 – June 19, 2025
 
 ### 🚀 New Features

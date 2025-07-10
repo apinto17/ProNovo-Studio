@@ -4,9 +4,11 @@
  * FastAPI
  * OpenAPI spec version: 0.1.0
  */
+import type { MessageData } from './messageData';
 
 export interface Message {
   id: number;
   sender: string;
   content: string;
+  data: MessageData;
 }

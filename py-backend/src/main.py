@@ -3,6 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 import json
 from routes.home.route import home_router
 from routes.messages.send_message import send_message_router
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 app = FastAPI()

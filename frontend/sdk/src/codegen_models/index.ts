@@ -7,5 +7,6 @@
 
 export * from './hTTPValidationError';
 export * from './message';
+export * from './messageData';
 export * from './validationError';
 export * from './validationErrorLocItem';

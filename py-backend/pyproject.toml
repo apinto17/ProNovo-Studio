@@ -6,9 +6,13 @@ authors = [
     {name = "apinto17",email = "apinto0704@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<4.0"
 dependencies = [
-    "fastapi[standard] (>=0.115.13,<0.116.0)"
+    "fastapi[standard] (>=0.115.13,<0.116.0)",
+    "requests (>=2.32.4,<3.0.0)",
+    "langchain (>=0.3.26,<0.4.0)",
+    "openai (>=1.93.0,<2.0.0)",
+    "langchain-community (>=0.3.26,<0.4.0)"
 ]
 
 [tool.poetry]
