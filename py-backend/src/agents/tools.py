@@ -1,22 +1,16 @@
 from typing import List
 from langchain.tools import tool
-from pydantic import BaseModel
+from agents.schemas import ProteinDesignInput
 import requests
 import os
 import json
-from agents.schemas import ProteinDesignResult
+from agents.schemas import ProteinDesignResult, PDBSearchInput
 from langchain.tools import StructuredTool
 
 rf_key = os.getenv("RF_DIFF_KEY")
 
-class ProteinDesignInput(BaseModel):
-    input_pdb: str
-    hotspot_res: List[str]
-    contigs: str
-    diffusion_steps: int = 15
-
 def design_protein(input_pdb: str, hotspot_res: list[str], contigs: str, diffusion_steps: int = 15) -> dict:
-    
+    print(f"Designing protein with hotspot_res {hotspot_res} and contigs {contigs}")
     r = requests.post(
     url=os.getenv("URL", "https://health.api.nvidia.com/v1/biology/ipd/rfdiffusion/generate"),
     headers={"Authorization": f"Bearer {rf_key}"},
@@ -64,11 +58,18 @@ rf_diffusion_tool = StructuredTool.from_function(
     return_schema=dict,
 )
 
-@tool
-def pdb_search_tool(pdb_id: str) -> str:
-    """Download the full PDB file content from RCSB using the PDB ID (e.g., '1R42')."""
+def search_pdb(pdb_id: str) -> str:
+    print(f"Searching pdb {pdb_id}")
     response = requests.get(f"https://files.rcsb.org/download/{pdb_id}.pdb")
     if response.status_code == 200:
         lines = filter(lambda line: line.startswith("ATOM"), response.text.split("\n"))
         return "\n".join(list(lines)[:100])
     return f"Error fetching {pdb_id}"
+
+pdb_search_tool = StructuredTool.from_function(
+    func=search_pdb,
+    name="pdb_search_tool",
+    description="""Download the full PDB file content from RCSB using the PDB ID (e.g., '1R42').""",
+    args_schema=PDBSearchInput,
+    return_schema=str
+)

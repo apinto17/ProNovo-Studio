@@ -1,5 +1,15 @@
 # 📦 Release Notes
 
+## Version 1.0.2 – July 16, 2025
+
+### 🚀 New Features
+
+- **Agentic Tooling**: Set up langgraph for better agent flow and tool calling, currently equipped with RF Diffusion and PDB search
+
+### 🐛 Bug Fixes
+
+- Fixed poor responses due to not looping back to main agent
+
 ## Version 1.0.1 – July 2, 2025
 
 ### 🚀 New Features

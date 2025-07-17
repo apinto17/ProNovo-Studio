@@ -1,9 +1,10 @@
-from typing import Optional
 from fastapi import APIRouter
-from agents.schemas import ToolOutputCaptureHandler
-from agents.schemas import ProteinDesignResult
-from pydantic import BaseModel, ValidationError
-from agents.agent import Agent
+from pydantic import BaseModel
+from typing import Optional
+from agents.agent_graph import get_langgraph_agent, get_test_graph
+from langchain_core.messages import HumanMessage, AIMessage
+from langchain_core.messages import ToolMessage
+import json
 
 send_message_router = APIRouter()
 
@@ -13,24 +14,30 @@ class message(BaseModel):
     content: str
     data: Optional[str]
 
+agent = get_test_graph()
+
 @send_message_router.post("/message-send")
 async def send_message(data: message) -> message:
-    agent = Agent.get_agent()
-    handler = ToolOutputCaptureHandler()
-    response = await agent.ainvoke({"input": data.content}, config={"callbacks": [handler]})
+    state = {
+        "messages": [HumanMessage(content=data.content)],
+        "inputs": {},
+        "tool_outputs": []
+    }
 
-    # Check if the tool output is present
+    result = agent.invoke(state)
+
+    # Extract final PDB data from tool outputs
     pdb_data = None
-    for output in handler.tool_outputs:
-        print(output)
-        if isinstance(output, dict) and "pdb" in output:
-            pdb_data = output["pdb"]
-
-    print(response)
+    for bot_message in result["messages"]:
+        if isinstance(bot_message, ToolMessage):
+            output = bot_message.content
+            if bot_message.name == "rf_diffusion_tool":
+                output = json.loads(output)
+                pdb_data = output["pdb"]
 
     return message(
         id=data.id + 1,
         sender="bot",
-        content=response["output"],
+        content=result["messages"][-1].content if result["messages"] else "Done",
         data=pdb_data
     )

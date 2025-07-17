@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import List, Optional
 from langchain.callbacks.base import BaseCallbackHandler
 
 class ToolOutputCaptureHandler(BaseCallbackHandler):
@@ -12,3 +12,12 @@ class ToolOutputCaptureHandler(BaseCallbackHandler):
 class ProteinDesignResult(BaseModel):
     message: str
     pdb: Optional[str] = None
+
+class ProteinDesignInput(BaseModel):
+    input_pdb: str
+    hotspot_res: List[str]
+    contigs: str
+    diffusion_steps: int = 15
+
+class PDBSearchInput(BaseModel):
+    pdb_id: str
